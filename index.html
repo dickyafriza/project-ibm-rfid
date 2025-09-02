@@ -1,13 +1,255 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RFID IoT Parking Management System</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartPark RFID - IoT Parking Management System</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="header-info">
+                        <h1>SmartPark RFID</h1>
+                        <p>IoT Parking Management System</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="time-display">
+                        <p id="current-time"></p>
+                        <p id="current-date"></p>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <div class="nav-items">
+                    <button class="nav-item active" data-tab="dashboard">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item" data-tab="parking">
+                        <i class="fas fa-car"></i>
+                        <span>Parking Grid</span>
+                    </button>
+                    <button class="nav-item" data-tab="rfid">
+                        <i class="fas fa-credit-card"></i>
+                        <span>RFID Cards</span>
+                    </button>
+                    <button class="nav-item" data-tab="devices">
+                        <i class="fas fa-wifi"></i>
+                        <span>IoT Devices</span>
+                    </button>
+                    <button class="nav-item" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="content">
+                <!-- Dashboard Tab -->
+                <div id="dashboard-tab" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Total Spaces</p>
+                                    <p class="stat-value" id="total-spaces">60</p>
+                                </div>
+                                <i class="fas fa-car stat-icon blue"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Occupied</p>
+                                    <p class="stat-value" id="occupied-spaces">24</p>
+                                </div>
+                                <i class="fas fa-chart-line stat-icon emerald"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Active Cards</p>
+                                    <p class="stat-value" id="active-cards">4</p>
+                                </div>
+                                <i class="fas fa-credit-card stat-icon purple"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-content">
+                                <div class="stat-info">
+                                    <p class="stat-label">Online Devices</p>
+                                    <p class="stat-value" id="online-devices">4/5</p>
+                                </div>
+                                <i class="fas fa-wifi stat-icon green"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occupancy Overview -->
+                    <div class="card">
+                        <h3>Occupancy Overview</h3>
+                        <div class="occupancy-content">
+                            <div class="occupancy-info">
+                                <span>Current Occupancy</span>
+                                <span id="occupancy-rate">40.0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="occupancy-progress"></div>
+                            </div>
+                            <div class="occupancy-stats">
+                                <div class="occupancy-stat">
+                                    <p>Available</p>
+                                    <p class="green" id="available-count">36</p>
+                                </div>
+                                <div class="occupancy-stat">
+                                    <p>Occupied</p>
+                                    <p class="red" id="occupied-count">24</p>
+                                </div>
+                                <div class="occupancy-stat">
+                                    <p>Total</p>
+                                    <p class="blue" id="total-count">60</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <h3>Recent Activity</h3>
+                        <div id="recent-activity" class="activity-list">
+                            <!-- Activity items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parking Grid Tab -->
+                <div id="parking-tab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>Parking Grid</h2>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color available"></div>
+                                <span>Available</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color occupied"></div>
+                                <span>Occupied</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level Tabs -->
+                    <div class="level-tabs">
+                        <button class="level-tab active" data-level="1">Ground Floor</button>
+                        <button class="level-tab" data-level="2">Level 1</button>
+                        <button class="level-tab" data-level="3">Level 2</button>
+                    </div>
+
+                    <!-- Parking Grid -->
+                    <div id="parking-grid" class="parking-grid">
+                        <!-- Grid will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- RFID Cards Tab -->
+                <div id="rfid-tab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>RFID Card Management</h2>
+                        <button class="btn-primary">Add New Card</button>
+                    </div>
+
+                    <div id="rfid-cards" class="cards-list">
+                        <!-- Cards will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- IoT Devices Tab -->
+                <div id="devices-tab" class="tab-content">
+                    <div class="tab-header">
+                        <h2>IoT Device Status</h2>
+                        <div class="live-indicator">
+                            <div class="pulse-dot"></div>
+                            <span>Live Status</span>
+                        </div>
+                    </div>
+
+                    <div id="iot-devices" class="devices-list">
+                        <!-- Devices will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="tab-content">
+                    <h2>System Settings</h2>
+                    
+                    <div class="settings-grid">
+                        <div class="card">
+                            <h3>Parking Configuration</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>Maximum Parking Duration (hours)</label>
+                                    <input type="number" value="24" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Hourly Rate ($)</label>
+                                    <input type="number" value="5.00" step="0.25" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Grace Period (minutes)</label>
+                                    <input type="number" value="15" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>RFID Configuration</h3>
+                            <div class="settings-form">
+                                <div class="form-group checkbox-group">
+                                    <label>Auto-block on insufficient balance</label>
+                                    <input type="checkbox" checked class="form-checkbox">
+                                </div>
+                                <div class="form-group">
+                                    <label>Minimum balance warning ($)</label>
+                                    <input type="number" value="10.00" step="0.25" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>System Actions</h3>
+                            <div class="action-buttons">
+                                <button class="btn-secondary">Export Data</button>
+                                <button class="btn-warning">System Backup</button>
+                                <button class="btn-danger">Reset System</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="src/app.js"></script>
+</body>
 </html>
