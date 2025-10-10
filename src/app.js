@@ -131,6 +131,7 @@ class ParkingSystem {
         // Tab navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
+                e.preventDefault();
                 const tab = e.currentTarget.dataset.tab;
                 this.switchTab(tab);
             });
@@ -139,8 +140,34 @@ class ParkingSystem {
         // Level tabs
         document.querySelectorAll('.level-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
+                e.preventDefault();
                 const level = parseInt(e.currentTarget.dataset.level);
                 this.switchLevel(level);
+            });
+        });
+
+        // Add New Card button
+        const addCardBtn = document.querySelector('.btn-primary');
+        if (addCardBtn) {
+            addCardBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showAddCardModal();
+            });
+        }
+
+        // Settings form inputs
+        document.querySelectorAll('.form-input, .form-checkbox').forEach(input => {
+            input.addEventListener('change', (e) => {
+                this.saveSettings();
+            });
+        });
+
+        // Action buttons
+        document.querySelectorAll('.btn-secondary, .btn-warning, .btn-danger').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const action = e.currentTarget.textContent.trim();
+                this.handleActionButton(action);
             });
         });
     }
@@ -177,6 +204,32 @@ class ParkingSystem {
         });
 
         this.renderParkingGrid();
+    }
+
+    showAddCardModal() {
+        alert('Add New Card functionality would open a modal here');
+        // In a real application, this would open a modal form
+    }
+
+    saveSettings() {
+        console.log('Settings saved');
+        // In a real application, this would save to backend
+    }
+
+    handleActionButton(action) {
+        switch(action) {
+            case 'Export Data':
+                alert('Exporting data...');
+                break;
+            case 'System Backup':
+                alert('Creating system backup...');
+                break;
+            case 'Reset System':
+                if (confirm('Are you sure you want to reset the system?')) {
+                    alert('System reset initiated...');
+                }
+                break;
+        }
     }
 
     renderCurrentTab() {
